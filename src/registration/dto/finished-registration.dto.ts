@@ -9,16 +9,13 @@ export class FinishRegistrationDto {
   email: string;
 
   @IsNotEmpty({ message: 'CPF ou CNPJ é obrigatório' })
-  cpfOrCnpj: string;
+  document: string;
 
   @IsNotEmpty({ message: 'Telefone é obrigatório' })
   phone: string;
 
   @IsNotEmpty({ message: 'CEP é obrigatório' })
   cep: string;
-
-  @IsNotEmpty({ message: 'Número é obrigatório' })
-  number: string;
 
   @IsNotEmpty({ message: 'Rua é obrigatória' })
   street: string;

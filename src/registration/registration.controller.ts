@@ -42,7 +42,7 @@ export class RegistrationController {
   }
 
 
-  @Patch('id/finish')
+  @Patch(':id/finish')
   async finish(@Param('id') id: string) {
 
     const updatedRegistration = await this.registrationService.finishRegistration(id)

@@ -1,5 +1,4 @@
 import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
-import { nanoid } from "nanoid";
 
 // Esse decoretor transforma essa classe em uma tabela
 // O "nullablew permite que o usuario saia e volte quando quiser"
@@ -10,8 +9,12 @@ export class Registration {
 
     @BeforeInsert()
     generateId() {
-        this.id = nanoid(10); // gera 10 caracteres
+      // Gera um ID aleatório de 10 caracteres
+      this.id = Math.random().toString(36).substring(2, 12);
     }
+
+    @Column({ nullable: true })
+    draftId?: string; // identifica o rascunho
 
     //step 1: identificação
     @Column({ nullable: true })
