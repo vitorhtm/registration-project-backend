@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
-import { CreateRegistrationDto } from './dto/create-registration.dto';
-import { UpdateRegistrationDto } from './dto/update-registration.dto';
+import { CreateIdentificationDto } from './dto/create-identification.dto';
+import { UpdateDocumentDto } from './dto/update-document.dto';
+import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Controller('registration')
 export class RegistrationController {
-  constructor(private readonly registrationService: RegistrationService) {}
+  constructor(private readonly registrationService: RegistrationService) { }
 
   @Post()
-  create(@Body() createRegistrationDto: CreateRegistrationDto) {
-    return this.registrationService.create(createRegistrationDto);
+  async create(@Body() createRegistration: CreateIdentificationDto) {
+    const registration = await this.registrationService.createRegistration(createRegistration)
+    return registration
   }
 
-  @Get()
-  findAll() {
-    return this.registrationService.findAll();
+
+  @Patch(':id/document')
+  async updateDocument(@Param('id') id: string, @Body() document: UpdateDocumentDto) {
+
+    const updatedRegistration = await this.registrationService.updateRegistration(id, document)
+    
+    return updatedRegistration
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.registrationService.findOne(+id);
-  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRegistrationDto: UpdateRegistrationDto) {
-    return this.registrationService.update(+id, updateRegistrationDto);
-  }
+  @Patch(':id/contact')
+  async updateContact(@Param('id') id: string, @Body() phone: UpdateContactDto) {
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.registrationService.remove(+id);
+    const updatedRegistration = await this.registrationService.updateRegistration(id, phone)
+    
+    return updatedRegistration
   }
 }

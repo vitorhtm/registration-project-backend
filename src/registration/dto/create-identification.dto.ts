@@ -1,5 +1,9 @@
+import { IsEmail, IsNotEmpty } from 'class-validator';
+
 export class CreateIdentificationDto {
-    name: string;
-    email: string;
-  }
-  
+  @IsNotEmpty({ message: 'O nome é obrigatório' })
+  name: string;
+
+  @IsEmail({}, { message: 'E-mail è obrigatório' })
+  email: string;
+}
