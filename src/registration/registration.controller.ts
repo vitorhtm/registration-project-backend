@@ -3,6 +3,7 @@ import { RegistrationService } from './registration.service';
 import { CreateIdentificationDto } from './dto/create-identification.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { UpdateAddressDto } from './dto/update-address.dto';
 
 @Controller('registration')
 export class RegistrationController {
@@ -19,7 +20,7 @@ export class RegistrationController {
   async updateDocument(@Param('id') id: string, @Body() document: UpdateDocumentDto) {
 
     const updatedRegistration = await this.registrationService.updateRegistration(id, document)
-    
+
     return updatedRegistration
   }
 
@@ -28,7 +29,27 @@ export class RegistrationController {
   async updateContact(@Param('id') id: string, @Body() phone: UpdateContactDto) {
 
     const updatedRegistration = await this.registrationService.updateRegistration(id, phone)
-    
+
     return updatedRegistration
+  }
+
+  @Patch(':id/address')
+  async updateAddress(@Param('id') id: string, @Body() address: UpdateAddressDto) {
+
+    const updatedRegistration = await this.registrationService.updateAddress(id, address)
+
+    return updatedRegistration
+  }
+
+
+  @Patch('id/finish')
+  async finish(@Param('id') id: string) {
+
+    const updatedRegistration = await this.registrationService.finishRegistration(id)
+
+    return {
+      message: 'Cadastro finalizado com sucesso',
+      registration: updatedRegistration
+    }
   }
 }
