@@ -8,7 +8,6 @@ import { BadRequestException } from '@nestjs/common';
 
 describe('RegistrationController', () => {
   let controller: RegistrationController;
-  let service: RegistrationService;
 
   const mockRepository = {
     findOne: jest.fn(),
@@ -41,7 +40,6 @@ describe('RegistrationController', () => {
       .compile();
 
     controller = module.get<RegistrationController>(RegistrationController);
-    service = module.get<RegistrationService>(RegistrationService);
   });
 
   afterEach(() => {
@@ -55,7 +53,10 @@ describe('RegistrationController', () => {
   it('deve chamar createRegistration do service', async () => {
     mockService.createRegistration.mockResolvedValue({ id: 'test-id' });
 
-    const result = await controller.create({ name: 'Vitor', email: 'vitor@test.com' });
+    const result = await controller.create({
+      name: 'Vitor',
+      email: 'vitor@test.com',
+    });
     expect(result.id).toBe('test-id');
     expect(mockService.createRegistration).toHaveBeenCalled();
   });
@@ -88,8 +89,12 @@ describe('RegistrationController', () => {
   });
 
   it('deve lançar BadRequestException se finish falhar', async () => {
-    mockService.finishRegistration.mockRejectedValue(new BadRequestException('Erro'));
+    mockService.finishRegistration.mockRejectedValue(
+      new BadRequestException('Erro'),
+    );
 
-    await expect(controller.finish('invalid-id')).rejects.toThrow(BadRequestException);
+    await expect(controller.finish('invalid-id')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });

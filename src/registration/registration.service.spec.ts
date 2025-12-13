@@ -14,7 +14,7 @@ describe('RegistrationService', () => {
   };
 
   const mockCepService = {
-    getAddressFromCep: jest.fn(),
+    getAddress: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -27,30 +27,47 @@ describe('RegistrationService', () => {
     }).compile();
 
     service = module.get<RegistrationService>(RegistrationService);
-
-    // Limpa os mocks antes de cada teste
     jest.clearAllMocks();
   });
 
   it('deve criar um novo registro caso não exista', async () => {
     mockRepository.findOne.mockResolvedValue(null);
-    mockRepository.create.mockImplementation(dto => dto); // retorna o dto literal
-    mockRepository.save.mockImplementation(reg => ({ id: 'test-id-123', ...reg }));
+
+    mockRepository.create.mockImplementation(
+      (dto: Partial<Registration>) => dto as Registration,
+    );
+
+    mockRepository.save.mockImplementation(
+      (entity) =>
+        ({
+          ...entity,
+          id: 'test-id-123',
+        }) as Registration,
+    );
 
     const result = await service.createRegistration({
       name: 'Vitor',
       email: 'vitor@test.com',
     });
 
-    expect(result.id).toBeDefined();
+    expect(result.id).toBe('test-id-123');
     expect(result.name).toBe('Vitor');
-    expect(mockRepository.save).toHaveBeenCalled();
+    expect(mockRepository.save).toHaveBeenCalledTimes(1);
   });
 
   it('deve atualizar um registro existente', async () => {
-    const existing = { id: 'abc', name: 'Vitor', email: 'vitor@test.com', updatedAt: new Date() };
+    const existing: Registration = {
+      id: 'abc',
+      name: 'Vitor',
+      email: 'vitor@test.com',
+      updatedAt: new Date(),
+      startedAt: new Date(),
+      finishedAt: null,
+    } as Registration;
+
     mockRepository.findOne.mockResolvedValue(existing);
-    mockRepository.save.mockImplementation(reg => ({ ...reg }));
+
+    mockRepository.save.mockImplementation((entity) => entity as Registration);
 
     const result = await service.createRegistration({
       name: 'Vitor Updated',
@@ -58,6 +75,6 @@ describe('RegistrationService', () => {
     });
 
     expect(result.name).toBe('Vitor Updated');
-    expect(mockRepository.save).toHaveBeenCalled();
+    expect(mockRepository.save).toHaveBeenCalledTimes(1);
   });
 });

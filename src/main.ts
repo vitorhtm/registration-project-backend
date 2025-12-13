@@ -7,11 +7,13 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // remove campos extras que não existem no DTO
-      forbidNonWhitelisted: true, // retorna erro se vierem campos desconhecidos
+      whitelist: true,
+      forbidNonWhitelisted: true,
     }),
   );
 
   await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+
+//usando void para o eslint saber que eu sei que estou ignorando a promise da função de proposito
+void bootstrap();

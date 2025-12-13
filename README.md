@@ -9,21 +9,21 @@ Este projeto é um backend para um fluxo de cadastro dividido em etapas sequenci
 Principais funcionalidades:
 
 - Persistência de dados a cada etapa concluída.
-- Criação e atualização de rascunhos.
-- Controle de datas de início, atualização e finalização do cadastro.
+- Criação e atualização de rascunhos (`draftId`).
+- Controle de datas de início (`startedAt`), última atualização (`updatedAt`) e finalização (`finishedAt`) do cadastro.
 - Validação dos campos obrigatórios antes da finalização.
 - Retorno de mensagem de sucesso ao finalizar o cadastro.
 
 ## Tecnologias
 
-- **NestJS** – Framework backend.
-- **TypeORM** – ORM para banco de dados.
-- **PostgreSQL** (ou outro banco suportado pelo TypeORM)
-- **Jest** – Testes unitários.
+- NestJS
+- TypeORM
+- PostgreSQL
+- Jest
+- ESLint
 
 ## Estrutura do Projeto
 
-```
 src/
   registration/
     entities/
@@ -31,65 +31,42 @@ src/
     registration.controller.ts
     registration.service.ts
     registration.module.ts
-```
 
 ## Rotas Principais
 
-- `POST /registration` – Cria um novo registro ou rascunho.
-- `PATCH /registration/:id/document` – Atualiza documentos do registro.
-- `PATCH /registration/:id/contact` – Atualiza dados de contato.
-- `PATCH /registration/:id/address` – Atualiza endereço (busca automática pelo CEP).
-- `PATCH /registration/id/finish` – Finaliza o cadastro, validando todos os campos obrigatórios.
+- POST /registration – Cria um novo registro ou rascunho.
+- PATCH /registration/:id/document – Atualiza documentos do registro.
+- PATCH /registration/:id/contact – Atualiza dados de contato.
+- PATCH /registration/:id/address – Atualiza endereço.
+- PATCH /registration/:id/finish – Finaliza o cadastro.
+
+## Configuração do Banco de Dados
+
+Crie um arquivo .env na raiz do projeto:
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=registration_db
 
 ## Como Rodar o Projeto
 
-1. Clone o repositório:
+1. npm install
+2. npm run start:dev
 
-```bash
-git clone <url-do-repositorio>
-cd <nome-do-repositorio>
-```
-
-2. Instale as dependências:
-
-```bash
-npm install
-```
-
-3. Configure o banco de dados no arquivo `.env`.
-
-4. Rode as migrações (se houver):
-
-```bash
-npm run typeorm migration:run
-```
-
-5. Inicie o servidor:
-
-```bash
-npm run start:dev
-```
-
-O backend estará disponível em `http://localhost:3000`.
+O backend estará disponível em http://localhost:3000
 
 ## Testes
 
-Execute os testes unitários com:
-
-```bash
 npm run test
-```
 
-Os testes cobrem:
+## ESLint
 
-- Criação de registros e rascunhos.
-- Atualização de registros.
-- Finalização do cadastro com validação de campos obrigatórios.
-- Controle de datas de início, atualização e finalização.
+npm run lint
 
 ## Observações
 
-- Cada registro possui um `draftId` para controlar rascunhos.
-- O cadastro é persistido a cada etapa, garantindo que o usuário possa continuar de onde parou.
-- A finalização valida todos os campos obrigatórios e retorna uma mensagem de sucesso.
-- Este README foi elaborado com auxílio de inteligência artificial, garantindo cla
+- O cadastro é persistido a cada etapa.
+- O usuário pode continuar o cadastro de onde parou.
+- README elaborado com auxílio de inteligência artificial.

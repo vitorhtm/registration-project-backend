@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, IsNull } from 'typeorm';
 import { Registration } from './entities/registration.entity';
@@ -13,14 +17,14 @@ export class RegistrationService {
   constructor(
     @InjectRepository(Registration)
     private repo: Repository<Registration>,
-    private cepService: CepService
-  ) { }
+    private cepService: CepService,
+  ) {}
 
   // Cria ou atualiza rascunho com base no email
   async createRegistration(registration: CreateIdentificationDto) {
     // procura rascunho existente
     const existing = await this.repo.findOne({
-      where: { email: registration.email, finishedAt: IsNull() }
+      where: { email: registration.email, finishedAt: IsNull() },
     });
 
     if (existing) {
@@ -32,7 +36,7 @@ export class RegistrationService {
         draftId: Math.random().toString(36).substring(2, 12), // id de rascunho
         startedAt: new Date(),
         updatedAt: new Date(),
-        finishedAt: null
+        finishedAt: null,
       });
       return await this.repo.save(entity);
     }
@@ -66,7 +70,7 @@ export class RegistrationService {
 
     if (errors.length > 0) {
       const messages = errors
-        .map(err => err.constraints ? Object.values(err.constraints) : [])
+        .map((err) => (err.constraints ? Object.values(err.constraints) : []))
         .flat();
 
       throw new BadRequestException(messages);
