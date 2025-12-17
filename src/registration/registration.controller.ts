@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Get } from '@nestjs/common';
 import { RegistrationService } from './registration.service';
 import { CreateIdentificationDto } from './dto/create-identification.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
@@ -38,6 +38,11 @@ export class RegistrationController {
     return updatedRegistration;
   }
 
+  @Get('cep/:cep')
+  async getCep(@Param('cep') cep: string) {
+    return this.registrationService.getAddressFromCep(cep);
+  }
+
   @Patch(':id/address')
   async updateAddress(
     @Param('id') id: string,
@@ -61,4 +66,10 @@ export class RegistrationController {
       registration: updatedRegistration,
     };
   }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.registrationService.findById(id);
+  }
+
 }

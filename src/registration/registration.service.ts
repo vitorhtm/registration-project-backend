@@ -53,6 +53,10 @@ export class RegistrationService {
     return await this.repo.save(registration);
   }
 
+  async getAddressFromCep(cep: string) {
+    return this.cepService.getAddress(cep);
+  }
+
   async updateAddress(id: string, dto: UpdateAddressDto) {
     const dadosCep = await this.cepService.getAddress(dto.cep);
 
@@ -86,5 +90,17 @@ export class RegistrationService {
 
     registration.finishedAt = new Date();
     return await this.repo.save(registration);
+  }
+
+  async findById(id: string) {
+    const registration = await this.repo.findOne({
+      where: { id },
+    });
+  
+    if (!registration) {
+      throw new NotFoundException('Cadastro não encontrado');
+    }
+  
+    return registration;
   }
 }
